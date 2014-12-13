@@ -2,9 +2,9 @@
 #ifndef _JEMALLOC_MEMPOOL_TESTER_H_
 #define _JEMALLOC_MEMPOOL_TESTER_H_
 
-#if _MSC_VER > 1020
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
-#endif  /* _MSC_VER > 1020 */
+#endif
 
 #include "jemalloc_test.h"
 

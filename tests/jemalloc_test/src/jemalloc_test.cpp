@@ -668,7 +668,7 @@ int main(int argc, char * argv[])
     // Get the current user language id
     g_lang_id = get_current_langid();
 
-    // Only for test english display
+    // Only for test the English tips text display
     //g_lang_id = LANG_EN_US;
 
     // Make the random seed

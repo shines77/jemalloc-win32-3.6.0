@@ -2,7 +2,9 @@
 #ifndef _JEMALLOC_TARGETVER_H_
 #define _JEMALLOC_TARGETVER_H_
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
+#endif
 
 // 以下宏定义要求的最低平台。要求的最低平台
 // 是具有运行应用程序所需功能的 Windows、Internet Explorer 等产品的

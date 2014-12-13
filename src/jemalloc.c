@@ -9,7 +9,7 @@ malloc_tsd_data(, thread_allocated, thread_allocated_t,
     THREAD_ALLOCATED_INITIALIZER)
 
 /* Runtime configuration options. */
-const char	*je_malloc_conf;
+const char	*je_malloc_conf = NULL;
 bool	opt_abort =
 #ifdef JEMALLOC_DEBUG
     true
@@ -32,49 +32,63 @@ bool	opt_xmalloc = false;
 bool	opt_zero = false;
 size_t	opt_narenas = 0;
 
-unsigned	ncpus;
+unsigned        ncpus;
 
-malloc_mutex_t		arenas_lock;
-arena_t			**arenas;
-unsigned		narenas_total;
-unsigned		narenas_auto;
+malloc_mutex_t  arenas_lock;
+arena_t         **arenas;
+unsigned        narenas_total;
+unsigned        narenas_auto;
 
 /* Set to true once the allocator has been initialized. */
 static bool		malloc_initialized = false;
 
 #ifdef JEMALLOC_THREADED_INIT
 /* Used to let the initializing thread recursively allocate. */
-#  define NO_INITIALIZER	((unsigned long)0)
-#  define INITIALIZER		pthread_self()
-#  define IS_INITIALIZER	(malloc_initializer == pthread_self())
-static pthread_t		malloc_initializer = NO_INITIALIZER;
+#  define NO_INITIALIZER    ((unsigned long)0)
+#  define INITIALIZER       pthread_self()
+#  define IS_INITIALIZER    (malloc_initializer == pthread_self())
+static pthread_t            malloc_initializer = NO_INITIALIZER;
 #else
-#  define NO_INITIALIZER	false
-#  define INITIALIZER		true
-#  define IS_INITIALIZER	malloc_initializer
-static bool			malloc_initializer = NO_INITIALIZER;
+#  define NO_INITIALIZER    false
+#  define INITIALIZER       true
+#  define IS_INITIALIZER    malloc_initializer
+static bool                 malloc_initializer = NO_INITIALIZER;
 #endif
 
 /* Used to avoid initialization races. */
 #ifdef _WIN32
 static malloc_mutex_t	init_lock;
+static bool             g_initlock_has_inited = false;
 
 JEMALLOC_ATTR(constructor)
 static void WINAPI
 _init_init_lock(void)
 {
+    if (g_initlock_has_inited == false) {
+        malloc_mutex_init(&init_lock);
+        g_initlock_has_inited = true;
+    }
+}
 
-	malloc_mutex_init(&init_lock);
+JEMALLOC_ATTR(destructor)
+static void WINAPI
+_uninit_init_lock(void)
+{
+    if (g_initlock_has_inited == true) {
+        malloc_mutex_uninit(&init_lock);
+        g_initlock_has_inited = false;
+    }
 }
 
 #ifdef _MSC_VER
 #  pragma section(".CRT$XCU", read)
 JEMALLOC_SECTION(".CRT$XCU") JEMALLOC_ATTR(used)
-static const void (WINAPI *init_init_lock)(void) = _init_init_lock;
+static const void (WINAPI *init_init_lock)(void)   = _init_init_lock;
+static const void (WINAPI *uninit_init_lock)(void) = _uninit_init_lock;
 #endif
 
 #else
-static malloc_mutex_t	init_lock = MALLOC_MUTEX_INITIALIZER;
+static malloc_mutex_t   init_lock = MALLOC_MUTEX_INITIALIZER;
 #endif
 
 typedef struct {
@@ -111,6 +125,32 @@ static bool	malloc_init_hard(void);
 /*
  * Begin miscellaneous support functions.
  */
+
+#ifdef _WIN32
+
+void je_init(void)
+{
+    _init_init_lock();
+}
+
+void je_uninit(void)
+{
+    _uninit_init_lock();
+}
+
+#else  /* !_WIN32 */
+
+void je_init(void)
+{
+    // Do nothing!
+}
+
+void je_uninit(void)
+{
+    // Do nothing!
+}
+
+#endif  /* _WIN32 */
 
 /* Create a new arena and insert it into the arenas array at index ind. */
 arena_t *
@@ -202,7 +242,6 @@ choose_arena_hard(void)
 static void
 stats_print_atexit(void)
 {
-
 	if (config_tcache && config_stats) {
 		unsigned narenas, i;
 
@@ -271,7 +310,6 @@ arenas_cleanup(void *arg)
 JEMALLOC_ALWAYS_INLINE_C void
 malloc_thread_init(void)
 {
-
 	/*
 	 * TSD initialization can't be safely done as a side effect of
 	 * deallocation, because it is possible for a thread to do nothing but
@@ -288,7 +326,6 @@ malloc_thread_init(void)
 JEMALLOC_ALWAYS_INLINE_C bool
 malloc_init(void)
 {
-
 	if (malloc_initialized == false && malloc_init_hard())
 		return (true);
 	malloc_thread_init();
@@ -376,7 +413,6 @@ static void
 malloc_conf_error(const char *msg, const char *k, size_t klen, const char *v,
     size_t vlen)
 {
-
 	malloc_printf("<jemalloc>: %s: %.*s:%.*s\n", msg, (int)klen, k,
 	    (int)vlen, v);
 }
@@ -1302,7 +1338,6 @@ je_realloc(void *ptr, size_t size)
 void
 je_free(void *ptr)
 {
-
 	UTRACE(ptr, 0, 0);
 	if (ptr != NULL)
 		ifree(ptr);
@@ -1375,7 +1410,6 @@ JEMALLOC_ALWAYS_INLINE_C void *
 imallocx(size_t usize, size_t alignment, bool zero, bool try_tcache,
     arena_t *arena)
 {
-
 	assert(usize == ((alignment == 0) ? s2u(usize) : sa2u(usize,
 	    alignment)));
 
@@ -1811,7 +1845,6 @@ int
 je_mallctl(const char *name, void *oldp, size_t *oldlenp, void *newp,
     size_t newlen)
 {
-
 	if (malloc_init())
 		return (EAGAIN);
 
@@ -1821,7 +1854,6 @@ je_mallctl(const char *name, void *oldp, size_t *oldlenp, void *newp,
 int
 je_mallctlnametomib(const char *name, size_t *mibp, size_t *miblenp)
 {
-
 	if (malloc_init())
 		return (EAGAIN);
 
@@ -1832,7 +1864,6 @@ int
 je_mallctlbymib(const size_t *mib, size_t miblen, void *oldp, size_t *oldlenp,
   void *newp, size_t newlen)
 {
-
 	if (malloc_init())
 		return (EAGAIN);
 
@@ -1843,7 +1874,6 @@ void
 je_malloc_stats_print(void (*write_cb)(void *, const char *), void *cbopaque,
     const char *opts)
 {
-
 	stats_print(write_cb, cbopaque, opts);
 }
 
@@ -1920,7 +1950,6 @@ je_rallocm(void **ptr, size_t *rsize, size_t size, size_t extra, int flags)
 int
 je_sallocm(const void *ptr, size_t *rsize, int flags)
 {
-
 	assert(rsize != NULL);
 	*rsize = je_sallocx(ptr, flags);
 	return (ALLOCM_SUCCESS);
@@ -1929,7 +1958,6 @@ je_sallocm(const void *ptr, size_t *rsize, int flags)
 int
 je_dallocm(void *ptr, int flags)
 {
-
 	je_dallocx(ptr, flags);
 	return (ALLOCM_SUCCESS);
 }
@@ -1974,7 +2002,6 @@ JEMALLOC_ATTR(constructor)
 static void
 jemalloc_constructor(void)
 {
-
 	malloc_init();
 }
 
@@ -2066,7 +2093,6 @@ jemalloc_postfork_child(void)
 static void *
 a0alloc(size_t size, bool zero)
 {
-
 	if (malloc_init())
 		return (NULL);
 
@@ -2082,14 +2108,12 @@ a0alloc(size_t size, bool zero)
 void *
 a0malloc(size_t size)
 {
-
 	return (a0alloc(size, false));
 }
 
 void *
 a0calloc(size_t num, size_t size)
 {
-
 	return (a0alloc(num * size, true));
 }
 

@@ -12,7 +12,6 @@ static malloc_tsd_cleanup_t cleanups[MALLOC_TSD_CLEANUPS_MAX];
 void *
 malloc_tsd_malloc(size_t size)
 {
-
 	/* Avoid choose_arena() in order to dodge bootstrapping issues. */
 	return (arena_malloc(arenas[0], size, false, false));
 }
@@ -20,14 +19,12 @@ malloc_tsd_malloc(size_t size)
 void
 malloc_tsd_dalloc(void *wrapper)
 {
-
 	idalloct(wrapper, false);
 }
 
 void
 malloc_tsd_no_cleanup(void *arg)
 {
-
 	not_reached();
 }
 
@@ -60,7 +57,6 @@ _malloc_thread_cleanup(void)
 void
 malloc_tsd_cleanup_register(bool (*f)(void))
 {
-
 	assert(ncleanups < MALLOC_TSD_CLEANUPS_MAX);
 	cleanups[ncleanups] = f;
 	ncleanups++;
@@ -69,7 +65,6 @@ malloc_tsd_cleanup_register(bool (*f)(void))
 void
 malloc_tsd_boot(void)
 {
-
 	ncleanups = 0;
 }
 
@@ -77,7 +72,6 @@ malloc_tsd_boot(void)
 static BOOL WINAPI
 _tls_callback(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-
 	switch (fdwReason) {
 #ifdef JEMALLOC_LAZY_LOCK
 	case DLL_THREAD_ATTACH:

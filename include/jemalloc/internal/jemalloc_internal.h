@@ -29,17 +29,40 @@
 #  define SIZE_T_MAX	SIZE_MAX
 #endif
 #include <stdarg.h>
+
+#ifdef _MSC_VER
+#include "msvc_compat/stdbool.h"
+#else
 #include <stdbool.h>
+#endif  /* _MSC_VER */
+
 #include <stdio.h>
 #include <stdlib.h>
+
+#if defined(_MSC_VER) && (_MSC_VER < 1600)
+#include "msvc_compat/stdint.h"
+#else
 #include <stdint.h>
+#endif  /* _MSC_VER */
+
 #include <stddef.h>
 #ifndef offsetof
 #  define offsetof(type, member)	((size_t)&(((type *)NULL)->member))
 #endif
+
+#ifdef _MSC_VER
+#include "msvc_compat/inttypes.h"
+#else
 #include <inttypes.h>
+#endif  /* _MSC_VER */
+
 #include <string.h>
+#ifdef _MSC_VER
+#include "msvc_compat/strings.h"
+#else
 #include <strings.h>
+#endif  /* _MSC_VER */
+
 #include <ctype.h>
 #ifdef _MSC_VER
 #  include <io.h>
@@ -77,6 +100,11 @@ typedef intptr_t ssize_t;
 #  include "../jemalloc.h"
 #endif
 #include "jemalloc/internal/private_namespace.h"
+
+#ifdef _MSC_VER
+#include "msvc_compat/strings.h"
+#include "msvc_compat/win_sbrk.h"
+#endif
 
 static const bool config_debug =
 #ifdef JEMALLOC_DEBUG
@@ -285,22 +313,22 @@ static const bool config_ivsalloc =
 #  endif
 #endif
 
-#define	QUANTUM			((size_t)(1U << LG_QUANTUM))
-#define	QUANTUM_MASK		(QUANTUM - 1)
+#define	QUANTUM         ((size_t)(1U << LG_QUANTUM))
+#define	QUANTUM_MASK    (QUANTUM - 1)
 
 /* Return the smallest quantum multiple that is >= a. */
 #define	QUANTUM_CEILING(a)						\
 	(((a) + QUANTUM_MASK) & ~QUANTUM_MASK)
 
-#define	LONG			((size_t)(1U << LG_SIZEOF_LONG))
-#define	LONG_MASK		(LONG - 1)
+#define	LONG_SIZEOF     ((size_t)(1U << LG_SIZEOF_LONG))
+#define	LONG_MASK       (LONG_SIZEOF - 1)
 
 /* Return the smallest long multiple that is >= a. */
 #define	LONG_CEILING(a)							\
 	(((a) + LONG_MASK) & ~LONG_MASK)
 
-#define	SIZEOF_PTR		(1U << LG_SIZEOF_PTR)
-#define	PTR_MASK		(SIZEOF_PTR - 1)
+#define	SIZEOF_PTR      (1U << LG_SIZEOF_PTR)
+#define	PTR_MASK        (SIZEOF_PTR - 1)
 
 /* Return the smallest (void *) multiple that is >= a. */
 #define	PTR_CEILING(a)							\
@@ -314,7 +342,7 @@ static const bool config_ivsalloc =
  * only handle raw constants.
  */
 #define	LG_CACHELINE		6
-#define	CACHELINE		64
+#define	CACHELINE		    64
 #define	CACHELINE_MASK		(CACHELINE - 1)
 
 /* Return the smallest cacheline multiple that is >= s. */
@@ -335,7 +363,7 @@ static const bool config_ivsalloc =
 
 /* Return the nearest aligned address at or below a. */
 #define	ALIGNMENT_ADDR2BASE(a, alignment)				\
-	((void *)((uintptr_t)(a) & (-(alignment))))
+	((void *)((uintptr_t)(a) & (-(intptr_t)(alignment))))
 
 /* Return the offset between a and the nearest aligned address at or below a. */
 #define	ALIGNMENT_ADDR2OFFSET(a, alignment)				\
@@ -343,7 +371,7 @@ static const bool config_ivsalloc =
 
 /* Return the smallest alignment multiple that is >= s. */
 #define	ALIGNMENT_CEILING(s, alignment)					\
-	(((s) + (alignment - 1)) & (-(alignment)))
+	(((s) + (alignment - 1)) & (-(intptr_t)(alignment)))
 
 /* Declare a variable length array */
 #if __STDC_VERSION__ < 199901L
@@ -460,6 +488,10 @@ static const bool config_ivsalloc =
 #include "jemalloc/internal/quarantine.h"
 #include "jemalloc/internal/prof.h"
 
+#ifdef _MSC_VER
+#include "msvc_compat/win_sbrk.h"
+#endif
+
 #undef JEMALLOC_H_TYPES
 /******************************************************************************/
 #define	JEMALLOC_H_STRUCTS
@@ -486,6 +518,10 @@ static const bool config_ivsalloc =
 #include "jemalloc/internal/quarantine.h"
 #include "jemalloc/internal/prof.h"
 
+#ifdef _MSC_VER
+#include "msvc_compat/win_sbrk.h"
+#endif
+
 typedef struct {
 	uint64_t	allocated;
 	uint64_t	deallocated;
@@ -498,7 +534,7 @@ typedef struct {
 
 #undef JEMALLOC_H_STRUCTS
 /******************************************************************************/
-#define	JEMALLOC_H_EXTERNS
+#define JEMALLOC_H_EXTERNS
 
 extern bool	opt_abort;
 extern bool	opt_junk;
@@ -556,6 +592,10 @@ void	jemalloc_postfork_child(void);
 #include "jemalloc/internal/quarantine.h"
 #include "jemalloc/internal/prof.h"
 
+#ifdef _MSC_VER
+#include "msvc_compat/win_sbrk.h"
+#endif
+
 #undef JEMALLOC_H_EXTERNS
 /******************************************************************************/
 #define	JEMALLOC_H_INLINES
@@ -574,6 +614,10 @@ void	jemalloc_postfork_child(void);
 #include "jemalloc/internal/base.h"
 #include "jemalloc/internal/chunk.h"
 #include "jemalloc/internal/huge.h"
+
+#ifdef _MSC_VER
+#include "msvc_compat/win_sbrk.h"
+#endif
 
 #ifndef JEMALLOC_ENABLE_INLINE
 malloc_tsd_protos(JEMALLOC_ATTR(unused), arenas, arena_t *)
@@ -764,7 +808,6 @@ malloc_tsd_protos(JEMALLOC_ATTR(unused), thread_allocated, thread_allocated_t)
 JEMALLOC_ALWAYS_INLINE void *
 imalloct(size_t size, bool try_tcache, arena_t *arena)
 {
-
 	assert(size != 0);
 
 	if (size <= arena_maxclass)
@@ -776,14 +819,12 @@ imalloct(size_t size, bool try_tcache, arena_t *arena)
 JEMALLOC_ALWAYS_INLINE void *
 imalloc(size_t size)
 {
-
 	return (imalloct(size, true, NULL));
 }
 
 JEMALLOC_ALWAYS_INLINE void *
 icalloct(size_t size, bool try_tcache, arena_t *arena)
 {
-
 	if (size <= arena_maxclass)
 		return (arena_malloc(arena, size, true, try_tcache));
 	else
@@ -793,7 +834,6 @@ icalloct(size_t size, bool try_tcache, arena_t *arena)
 JEMALLOC_ALWAYS_INLINE void *
 icalloc(size_t size)
 {
-
 	return (icalloct(size, true, NULL));
 }
 
@@ -825,7 +865,6 @@ ipalloct(size_t usize, size_t alignment, bool zero, bool try_tcache,
 JEMALLOC_ALWAYS_INLINE void *
 ipalloc(size_t usize, size_t alignment, bool zero)
 {
-
 	return (ipalloct(usize, alignment, zero, true, NULL));
 }
 
@@ -856,7 +895,6 @@ isalloc(const void *ptr, bool demote)
 JEMALLOC_ALWAYS_INLINE size_t
 ivsalloc(const void *ptr, bool demote)
 {
-
 	/* Return 0 if ptr is not within a chunk managed by jemalloc. */
 	if (rtree_get(chunks_rtree, (uintptr_t)CHUNK_ADDR2BASE(ptr)) == 0)
 		return (0);
@@ -903,14 +941,12 @@ idalloct(void *ptr, bool try_tcache)
 JEMALLOC_ALWAYS_INLINE void
 idalloc(void *ptr)
 {
-
 	idalloct(ptr, true);
 }
 
 JEMALLOC_ALWAYS_INLINE void
 iqalloct(void *ptr, bool try_tcache)
 {
-
 	if (config_fill && opt_quarantine)
 		quarantine(ptr);
 	else
@@ -920,7 +956,6 @@ iqalloct(void *ptr, bool try_tcache)
 JEMALLOC_ALWAYS_INLINE void
 iqalloc(void *ptr)
 {
-
 	iqalloct(ptr, true);
 }
 
@@ -991,7 +1026,6 @@ iralloct(void *ptr, size_t size, size_t extra, size_t alignment, bool zero,
 JEMALLOC_ALWAYS_INLINE void *
 iralloc(void *ptr, size_t size, size_t extra, size_t alignment, bool zero)
 {
-
 	return (iralloct(ptr, size, extra, alignment, zero, true, true, NULL));
 }
 

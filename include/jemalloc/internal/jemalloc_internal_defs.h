@@ -9,19 +9,22 @@
 /* #undef JEMALLOC_PREFIX */
 /* #undef JEMALLOC_CPREFIX */
 
+#define JEMALLOC_PREFIX     " je_ "
+#define JEMALLOC_CPREFIX    " JE_ "
+
 /*
  * JEMALLOC_PRIVATE_NAMESPACE is used as a prefix for all library-private APIs.
  * For shared libraries, symbol visibility mechanisms prevent these symbols
  * from being exported, but for static libraries, naming collisions are a real
  * possibility.
  */
-#define JEMALLOC_PRIVATE_NAMESPACE je_
+#define JEMALLOC_PRIVATE_NAMESPACE  je_
 
 /*
  * Hyper-threaded CPUs may need a special instruction inside spin loops in
  * order to yield to another virtual CPU.
  */
-#define CPU_SPINWAIT __asm__ volatile("pause")
+#define CPU_SPINWAIT                __asm__ volatile("pause")
 
 /* Defined if the equivalent of FreeBSD's atomic(9) functions are available. */
 /* #undef JEMALLOC_ATOMIC9 */
@@ -139,14 +142,18 @@
 /* #undef JEMALLOC_LAZY_LOCK */
 
 /* One page is 2^STATIC_PAGE_SHIFT bytes. */
-#define STATIC_PAGE_SHIFT 16
+#ifdef _WIN32
+#define STATIC_PAGE_SHIFT       12
+#else
+#define STATIC_PAGE_SHIFT       16
+#endif
 
 /*
  * If defined, use munmap() to unmap freed chunks, rather than storing them for
  * later reuse.  This is disabled by default on Linux because common sequences
  * of mmap()/munmap() calls will cause virtual memory map holes.
  */
-#define JEMALLOC_MUNMAP 
+#define JEMALLOC_MUNMAP
 
 /*
  * If defined, use mremap(...MREMAP_FIXED...) for huge realloc().  This is
@@ -156,7 +163,9 @@
 /* #undef JEMALLOC_MREMAP */
 
 /* TLS is used to map arenas and magazine caches to threads. */
-#define JEMALLOC_TLS 
+#if (defined(_MSC_VER) && (_MSC_VER >= 1600)) || !defined(_MSC_VER)
+#define JEMALLOC_TLS
+#endif
 
 /*
  * JEMALLOC_IVSALLOC enables ivsalloc(), which verifies that pointers reside
@@ -191,18 +200,40 @@
 /* #undef JEMALLOC_HAS_ALLOCA_H */
 
 /* C99 restrict keyword supported. */
-#define JEMALLOC_HAS_RESTRICT 1
+#if (defined(_MSC_VER) && (_MSC_VER >= 1500)) || !defined(_MSC_VER)
+#define JEMALLOC_HAS_RESTRICT   1
+#endif
 
 /* For use by hash code. */
 /* #undef JEMALLOC_BIG_ENDIAN */
 
 /* sizeof(int) == 2^LG_SIZEOF_INT. */
-#define LG_SIZEOF_INT 2
+#define LG_SIZEOF_INT       2
+
+#if defined(_WIN32) || defined(_M_IX86)
 
 /* sizeof(long) == 2^LG_SIZEOF_LONG. */
-#define LG_SIZEOF_LONG 3
+#define LG_SIZEOF_LONG      2
 
 /* sizeof(intmax_t) == 2^LG_SIZEOF_INTMAX_T. */
-#define LG_SIZEOF_INTMAX_T 3
+#define LG_SIZEOF_INTMAX_T  2
 
-#endif /* JEMALLOC_INTERNAL_DEFS_H_ */
+#elif defined(_WIN64) || defined(_M_X64)
+
+/* sizeof(long) == 2^LG_SIZEOF_LONG. */
+#define LG_SIZEOF_LONG      3
+
+/* sizeof(intmax_t) == 2^LG_SIZEOF_INTMAX_T. */
+#define LG_SIZEOF_INTMAX_T  3
+
+#else
+
+/* sizeof(long) == 2^LG_SIZEOF_LONG. */
+#define LG_SIZEOF_LONG      2
+
+/* sizeof(intmax_t) == 2^LG_SIZEOF_INTMAX_T. */
+#define LG_SIZEOF_INTMAX_T  2
+
+#endif  /* _WIN32 || _M_IX86 */
+
+#endif  /* JEMALLOC_INTERNAL_DEFS_H_ */

@@ -234,6 +234,7 @@
 #undef jemalloc_prefork
 #undef malloc_cprintf
 #undef malloc_mutex_init
+#undef malloc_mutex_uninit
 #undef malloc_mutex_lock
 #undef malloc_mutex_postfork_child
 #undef malloc_mutex_postfork_parent

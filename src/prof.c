@@ -927,6 +927,15 @@ label_return:
 	return (ret);
 }
 
+#ifdef _MSC_VER
+static
+unsigned int getpid()
+{
+    // Not implemented
+    return 0;
+}
+#endif
+
 static bool
 prof_dump_maps(bool propagate_err)
 {

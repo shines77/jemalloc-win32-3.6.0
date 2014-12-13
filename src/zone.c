@@ -1,4 +1,7 @@
 #include "jemalloc/internal/jemalloc_internal.h"
+
+#ifdef JEMALLOC_ZONE
+
 #ifndef JEMALLOC_ZONE
 #  error "This source file is for zones on Darwin (OS X)."
 #endif
@@ -256,3 +259,5 @@ register_zone(void)
 		malloc_zone_register(default_zone);
 	} while (malloc_default_zone() != &zone);
 }
+
+#endif  /* JEMALLOC_ZONE */

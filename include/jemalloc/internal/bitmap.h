@@ -10,9 +10,9 @@ typedef unsigned long bitmap_t;
 #define	LG_SIZEOF_BITMAP	LG_SIZEOF_LONG
 
 /* Number of bits per group. */
-#define	LG_BITMAP_GROUP_NBITS		(LG_SIZEOF_BITMAP + 3)
-#define	BITMAP_GROUP_NBITS		(ZU(1) << LG_BITMAP_GROUP_NBITS)
-#define	BITMAP_GROUP_NBITS_MASK		(BITMAP_GROUP_NBITS-1)
+#define	LG_BITMAP_GROUP_NBITS       (LG_SIZEOF_BITMAP + 3)
+#define	BITMAP_GROUP_NBITS          (ZU(1) << LG_BITMAP_GROUP_NBITS)
+#define	BITMAP_GROUP_NBITS_MASK     (BITMAP_GROUP_NBITS-1)
 
 /* Maximum number of levels possible. */
 #define	BITMAP_MAX_LEVELS						\

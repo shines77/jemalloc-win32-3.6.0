@@ -97,7 +97,7 @@ buferror(int err, char *buf, size_t buflen)
 }
 
 uintmax_t
-malloc_strtoumax(const char *restrict nptr, char **restrict endptr, int base)
+malloc_strtoumax(const char *__RESTRICT nptr, char **__RESTRICT endptr, int base)
 {
 	uintmax_t ret, digit;
 	int b;
@@ -191,7 +191,7 @@ malloc_strtoumax(const char *restrict nptr, char **restrict endptr, int base)
 		p++;
 	}
 	if (neg)
-		ret = -ret;
+		ret = -(intmax_t)ret;
 
 	if (p == ns) {
 		/* No conversion performed. */

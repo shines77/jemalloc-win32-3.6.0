@@ -101,7 +101,6 @@ base_node_alloc(void)
 void
 base_node_dealloc(extent_node_t *node)
 {
-
 	VALGRIND_MAKE_MEM_UNDEFINED(node, sizeof(extent_node_t));
 	malloc_mutex_lock(&base_mtx);
 	*(extent_node_t **)node = base_nodes;
@@ -112,7 +111,6 @@ base_node_dealloc(extent_node_t *node)
 bool
 base_boot(void)
 {
-
 	base_nodes = NULL;
 	if (malloc_mutex_init(&base_mtx))
 		return (true);
@@ -123,20 +121,17 @@ base_boot(void)
 void
 base_prefork(void)
 {
-
 	malloc_mutex_prefork(&base_mtx);
 }
 
 void
 base_postfork_parent(void)
 {
-
 	malloc_mutex_postfork_parent(&base_mtx);
 }
 
 void
 base_postfork_child(void)
 {
-
 	malloc_mutex_postfork_child(&base_mtx);
 }

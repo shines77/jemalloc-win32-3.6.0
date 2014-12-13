@@ -4,8 +4,11 @@
  * JEMALLOC_NO_DEMANGLE is defined (see jemalloc_mangle.h).
  */
 extern JEMALLOC_EXPORT const char	*je_malloc_conf;
-extern JEMALLOC_EXPORT void		(*je_malloc_message)(void *cbopaque,
-    const char *s);
+extern JEMALLOC_EXPORT void		    (*je_malloc_message)(void *cbopaque,
+                                                         const char *s);
+
+extern JEMALLOC_EXPORT void         je_init(void);
+extern JEMALLOC_EXPORT void         je_uninit(void);
 
 JEMALLOC_EXPORT void	*je_malloc(size_t size) JEMALLOC_ATTR(malloc);
 JEMALLOC_EXPORT void	*je_calloc(size_t num, size_t size)

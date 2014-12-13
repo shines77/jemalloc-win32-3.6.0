@@ -314,7 +314,6 @@ chunk_unmap(void *chunk, size_t size)
 void
 chunk_dealloc(void *chunk, size_t size, bool unmap)
 {
-
 	assert(chunk != NULL);
 	assert(CHUNK_ADDR2BASE(chunk) == chunk);
 	assert(size != 0);
@@ -336,7 +335,6 @@ chunk_dealloc(void *chunk, size_t size, bool unmap)
 bool
 chunk_boot(void)
 {
-
 	/* Set variables according to the value of opt_lg_chunk. */
 	chunksize = (ZU(1) << opt_lg_chunk);
 	assert(chunksize >= PAGE);
@@ -367,7 +365,6 @@ chunk_boot(void)
 void
 chunk_prefork(void)
 {
-
 	malloc_mutex_prefork(&chunks_mtx);
 	if (config_ivsalloc)
 		rtree_prefork(chunks_rtree);
@@ -377,7 +374,6 @@ chunk_prefork(void)
 void
 chunk_postfork_parent(void)
 {
-
 	chunk_dss_postfork_parent();
 	if (config_ivsalloc)
 		rtree_postfork_parent(chunks_rtree);
@@ -387,7 +383,6 @@ chunk_postfork_parent(void)
 void
 chunk_postfork_child(void)
 {
-
 	chunk_dss_postfork_child();
 	if (config_ivsalloc)
 		rtree_postfork_child(chunks_rtree);

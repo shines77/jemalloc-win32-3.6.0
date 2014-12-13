@@ -43,7 +43,7 @@
 #define	QI(q)	((int64_t)q)
 
 #ifndef __DECONST
-#  define	__DECONST(type, var)	((type)(uintptr_t)(const void *)(var))
+#  define __DECONST(type, var)  ((type)(uintptr_t)(const void *)(var))
 #endif
 
 #ifndef JEMALLOC_HAS_RESTRICT

@@ -2,7 +2,6 @@ jemalloc-win32-3.6.0
 ====================
 
 jemalloc 3.6.0 for Visual Studio 2008, 2010, and 2013 on Windows.
--------------------------------------------------------------------
 
 jemalloc is a general purpose malloc(3) implementation that emphasizes
 fragmentation avoidance and scalable concurrency support.  jemalloc first came
@@ -30,3 +29,5 @@ URL: http://www.canonware.com/jemalloc/
 Visual Studio(Windows) version modified by: shines77 (GuoXiongHui)
 
 URL: https://github.com/shines77/
+
+-------------------------------------------------------------------

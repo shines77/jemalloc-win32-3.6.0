@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\src;..\..\..\..\src\jemalloc;..\..\..\..\include;..\..\..\..\include\jemalloc;..\..\..\..\include\jemalloc\internal;..\..\..\..\include\msvc_compat;..\..\..\..\test;..\..\..\..\deps;&quot;$(SolutionDir)src&quot;;&quot;$(SolutionDir)include&quot;;.\src;.\include;.\include\jemalloc;.\include\jemalloc\internal;.\include\msvc_compat;.\test;.\deps;&quot;$(ProjectDir)src&quot;;&quot;$(ProjectDir)include&quot;"
+				AdditionalIncludeDirectories="..\..\..\..\src;..\..\..\..\src\jemalloc;..\..\..\..\include;..\..\..\..\include\jemalloc;..\..\..\..\test;..\..\..\..\deps;&quot;$(SolutionDir)src&quot;;&quot;$(SolutionDir)include&quot;;.\src;.\include;.\include\jemalloc;.\test;.\deps;&quot;$(ProjectDir)src&quot;;&quot;$(ProjectDir)include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_STATIC;GPL_DECLARE_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -109,7 +109,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\..\src;..\..\..\..\src\jemalloc;..\..\..\..\include;..\..\..\..\include\jemalloc;..\..\..\..\include\jemalloc\internal;..\..\..\..\include\msvc_compat;..\..\..\..\test;..\..\..\..\deps;&quot;$(SolutionDir)src&quot;;&quot;$(SolutionDir)include&quot;;.\src;.\include;.\include\jemalloc;.\include\jemalloc\internal;.\include\msvc_compat;.\test;.\deps;&quot;$(ProjectDir)src&quot;;&quot;$(ProjectDir)include&quot;"
+				AdditionalIncludeDirectories="..\..\..\..\src;..\..\..\..\src\jemalloc;..\..\..\..\include;..\..\..\..\include\jemalloc;..\..\..\..\test;..\..\..\..\deps;&quot;$(SolutionDir)src&quot;;&quot;$(SolutionDir)include&quot;;.\src;.\include;.\include\jemalloc;.\test;.\deps;&quot;$(ProjectDir)src&quot;;&quot;$(ProjectDir)include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_STATIC;GPL_DECLARE_STATIC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

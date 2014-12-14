@@ -160,9 +160,11 @@ extern "C" {
 #  endif  /* __RESTRICT	*/
 #endif	/* JEMALLOC_HAS_RESTRICT */
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1500)
 #ifndef	__thread
-//#define __thread
+//#define __thread            __declspec(thread)
 #endif
+#endif  /* _MSC_VER */
 
 /*
  * The je_ prefix on the following public symbol declarations is an	artifact

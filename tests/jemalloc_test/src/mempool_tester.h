@@ -50,14 +50,14 @@ enum alloc_ways
 
 typedef struct test_data_s
 {
-    size_types  size_type;
-    alloc_ways  alloc_way;
-//  int         chunk_type;
-    size_t      min_alloc_size;
-    size_t      max_alloc_size;
-    int         loop_count1;
-    int         loop_count2;
-    int         loop_count3;
+    size_types      size_type;
+    alloc_ways      alloc_way;
+//  int             chunk_type;
+    unsigned int    min_alloc_size;
+    unsigned int    max_alloc_size;
+    int             loop_count1;
+    int             loop_count2;
+    int             loop_count3;
 } test_data_t;
 
 FILE *mempool_log_init(const char *filename);
@@ -78,17 +78,17 @@ int   mempool_printf(char *fmt, ...);
 typedef struct mempool_test_param
 {
 public:
-    int     size_type;
-    int     alloc_way;
-    int     chunk_type;
-    size_t  min_alloc_size;
-    size_t  max_alloc_size;
-    int     loop_count1;
-    int     loop_count2;
-    int     loop_count3;
+    int             size_type;
+    int             alloc_way;
+    int             chunk_type;
+    unsigned int    min_alloc_size;
+    unsigned int    max_alloc_size;
+    int             loop_count1;
+    int             loop_count2;
+    int             loop_count3;
 
 private:
-    char    func_name[64];
+    char            func_name[64];
 } mempool_test_param;
 
 FORCE_INLINE

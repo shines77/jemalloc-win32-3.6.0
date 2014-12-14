@@ -50,7 +50,7 @@ static
 char *str_replace(const char *strbuf, const char *sstr, const char *dstr)
 {
     char *new_str = NULL, *next;
-    unsigned int len, str_len, src_len, dst_len;
+    size_t len, str_len, src_len, dst_len;
     register unsigned int i = 0;
     char *dup_buf;
 
@@ -112,7 +112,7 @@ static
 char *str_replace(const char *str_buf, const char *src_str, const char *dst_str, bool repeat)
 {
     char *new_str = NULL, *next;
-    unsigned int len, str_len, src_len, dst_len;
+    size_t len, str_len, src_len, dst_len;
     register unsigned int i = 0;
     char *dup_buf;
 
@@ -275,7 +275,7 @@ int mempool_printf( char *fmt, ... )
     if (log_file == NULL || log_file == INVALID_HANDLE_VALUE)
         mempool_log_init(DEFAULT_LOG_FILENAME);
     if (log_file != NULL && log_file != INVALID_HANDLE_VALUE)
-        _write((int)log_file, msg_buf, strlen(msg_buf));
+        _write((int)log_file, msg_buf, (unsigned int)strlen(msg_buf));
 
     new_fmt = str_replace(msg_buf, "%", "%%");
     if (new_fmt != NULL) {

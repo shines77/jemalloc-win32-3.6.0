@@ -394,7 +394,7 @@ char *format_bytes_size(char *buf, size_t size, int len)
                 sprintf(buf, fmt, size);
             }
         }
-        rest_len = len - strlen(buf);
+        rest_len = len - (unsigned int)strlen(buf);
         if (rest_len > 0) {
             for (i = 0; i < rest_len; i++) {
                 strcat(buf, " ");

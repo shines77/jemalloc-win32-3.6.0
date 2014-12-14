@@ -163,9 +163,15 @@
 /* #undef JEMALLOC_MREMAP */
 
 /* TLS is used to map arenas and magazine caches to threads. */
-#if (defined(_MSC_VER) && (_MSC_VER >= 1600)) || !defined(_MSC_VER)
+#if !defined(_MSC_VER)
 #define JEMALLOC_TLS
 #endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1500)
+#ifndef	__thread
+//#define __thread            __declspec(thread)
+#endif
+#endif  /* _MSC_VER */
 
 /*
  * JEMALLOC_IVSALLOC enables ivsalloc(), which verifies that pointers reside

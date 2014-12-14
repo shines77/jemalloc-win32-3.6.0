@@ -142,6 +142,11 @@ UpgradeLog.htm
 # For log file
 *.log
 
+# For text file
+!ReadMe.txt
+!readme.txt
+*.txt
+
 # For Intel C++ Compiler Log File & Project File
 IcUpdateLog.htm
 *.icproj

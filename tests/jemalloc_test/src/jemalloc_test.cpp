@@ -594,6 +594,7 @@ void Memory_Pool_Test()
     double time_orgi_malloc, time_je_malloc;
     //double time_tc_malloc, time_apr_malloc;
 
+#if 1
     // original malloc()
     malloc_tester *orgi_tester = new malloc_tester();
     test_length = sizeof(orig_malloc_test_params) / sizeof(test_data_t);
@@ -603,6 +604,7 @@ void Memory_Pool_Test()
         delete orgi_tester;
         orgi_tester = NULL;
     }
+#endif
 
     // je_malloc()
     jemalloc_tester *je_tester = new jemalloc_tester();

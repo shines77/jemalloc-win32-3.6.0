@@ -31,7 +31,6 @@ static void		*dss_max;
 static void *
 chunk_dss_sbrk(intptr_t increment)
 {
-
 #ifdef JEMALLOC_HAVE_SBRK
 	return (sbrk(increment));
 #else
@@ -56,7 +55,6 @@ chunk_dss_prec_get(void)
 bool
 chunk_dss_prec_set(dss_prec_t dss_prec)
 {
-
 	if (config_dss == false)
 		return (true);
 	malloc_mutex_lock(&dss_mtx);
@@ -159,7 +157,6 @@ chunk_in_dss(void *chunk)
 bool
 chunk_dss_boot(void)
 {
-
 	cassert(config_dss);
 
 	if (malloc_mutex_init(&dss_mtx))
@@ -174,7 +171,6 @@ chunk_dss_boot(void)
 void
 chunk_dss_prefork(void)
 {
-
 	if (config_dss)
 		malloc_mutex_prefork(&dss_mtx);
 }
@@ -182,7 +178,6 @@ chunk_dss_prefork(void)
 void
 chunk_dss_postfork_parent(void)
 {
-
 	if (config_dss)
 		malloc_mutex_postfork_parent(&dss_mtx);
 }
@@ -190,7 +185,6 @@ chunk_dss_postfork_parent(void)
 void
 chunk_dss_postfork_child(void)
 {
-
 	if (config_dss)
 		malloc_mutex_postfork_child(&dss_mtx);
 }

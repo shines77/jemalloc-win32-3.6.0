@@ -63,9 +63,9 @@ typedef struct test_data_s
 FILE *mempool_log_init(const char *filename);
 void  mempool_log_close(void);
 
-size_t get_rand32();
-
 int   mempool_printf(char *fmt, ...);
+
+size_t get_rand32();
 
 #ifdef __cplusplus
 }

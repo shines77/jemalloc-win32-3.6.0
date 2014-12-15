@@ -264,15 +264,14 @@ template <class T>
 inline
 void mempool_tester_base<T>::Run()
 {
-#ifdef _DEBUG
-    const int nMaxLoop  = 100000;
-    const int nMaxAlloc = 16384;
-#else
-    const int nMaxLoop  = 1000000;
-    const int nMaxAlloc = 16384;
-    //const int nMaxAlloc = 10000;
-#endif
-    const int kMaxMemList = 1024;
+    const int kMaxPtrList = 1024;
+
+    int i, j = 0;
+    int imax, jmax;
+    int loop_count;
+    size_t alloc_size;
+    size_t max_alloc;
+    void *p;
 
     //printf("mempool_tester_base<T>::Run();\n");
 
@@ -280,58 +279,50 @@ void mempool_tester_base<T>::Run()
     if (pThis == NULL)
         return;
 
-    int i, j = 0;
-    int imax, jmax;
-    size_t alloc_size;
-    void *p;
-
     if (test_param.size_type == ST_FIXED_SIZE && test_param.alloc_way == AW_REPEATED_ALLOC) {
         alloc_size = MAX(1, test_param.min_alloc_size);
-        for (i = 0; i < test_param.loop_count1; i++) {
-            p = pThis->Malloc(test_param.min_alloc_size);
+        loop_count = test_param.loop_count1;
+        for (i = 0; i < loop_count; i++) {
+            p = pThis->Malloc(alloc_size);
             if (p)
                 pThis->Free(p);
         }
     }
     else if (test_param.size_type == ST_CONTINUOUS_SIZE && test_param.alloc_way == AW_REPEATED_ALLOC) {
-#if 1
-        size_t max_alloc = test_param.max_alloc_size - test_param.min_alloc_size + 1;
-        for (i = 0; i < test_param.loop_count1; i++) {
-            alloc_size = (i % max_alloc) + test_param.min_alloc_size;
-            //alloc_size = MAX(1, alloc_size);
+        max_alloc = test_param.max_alloc_size - test_param.min_alloc_size + 1;
+        loop_count = test_param.loop_count1;
+        alloc_size = test_param.min_alloc_size;
+        for (i = 0; i < loop_count; i++) {
+            //alloc_size = (i % max_alloc) + test_param.min_alloc_size;
             p = pThis->Malloc(alloc_size);
             if (p)
                 pThis->Free(p);
+            alloc_size++;
+            if (alloc_size >= max_alloc)
+                alloc_size = test_param.min_alloc_size;
         }
-#else
-        for (i = 0; i < nMaxLoop; i++) {
-            alloc_size = (i % nMaxAlloc) + 1;
-            p = pThis->Malloc(alloc_size);
-            if (p)
-                pThis->Free(p);
-        }
-#endif
     }
     else if (test_param.size_type == ST_RANDOM_SIZE && test_param.alloc_way == AW_REPEATED_ALLOC) {
         size_t rnd;
-        size_t max_alloc = test_param.max_alloc_size - test_param.min_alloc_size + 1;
-        for (i = 0; i < test_param.loop_count1; i++) {
+        max_alloc = test_param.max_alloc_size - test_param.min_alloc_size + 1;
+        loop_count = test_param.loop_count1;
+        for (i = 0; i < loop_count; i++) {
             rnd = get_rand32();
             alloc_size = (rnd % max_alloc) + test_param.min_alloc_size;
-            //alloc_size = MAX(1, alloc_size);
             p = pThis->Malloc(alloc_size);
             if (p)
                 pThis->Free(p);
         }
     }
     else if (test_param.size_type == ST_FIXED_SIZE && test_param.alloc_way == AW_CONTIGUOUS_ALLOC) {
-        void *mem_list[kMaxMemList];
+        void *mem_list[kMaxPtrList];
         alloc_size = MAX(1, test_param.min_alloc_size);
-        imax = test_param.loop_count1 / kMaxMemList;
-        jmax = kMaxMemList;
+        loop_count = test_param.loop_count1;
+        imax = (loop_count + kMaxPtrList - 1) / kMaxPtrList;
+        jmax = kMaxPtrList;
         for (i = 0; i < imax; i++) {
             for (j = 0; j < jmax; j++) {
-                p = pThis->Malloc(test_param.min_alloc_size);
+                p = pThis->Malloc(alloc_size);
                 mem_list[j] = p;
             }
             for (j = 0; j < jmax; j++) {
@@ -342,16 +333,16 @@ void mempool_tester_base<T>::Run()
         }
     }
     else if (test_param.size_type == ST_RANDOM_SIZE && test_param.alloc_way == AW_CONTIGUOUS_ALLOC) {
-        void *mem_list[kMaxMemList];
+        void *mem_list[kMaxPtrList];
         size_t rnd;
-        size_t max_alloc = test_param.max_alloc_size - test_param.min_alloc_size + 1;
-        imax = test_param.loop_count1 / kMaxMemList;
-        jmax = kMaxMemList;
+        max_alloc = test_param.max_alloc_size - test_param.min_alloc_size + 1;
+        loop_count = test_param.loop_count1;
+        imax = (loop_count + kMaxPtrList - 1) / kMaxPtrList;
+        jmax = kMaxPtrList;
         for (i = 0; i < imax; i++) {
             for (j = 0; j < jmax; j++) {
                 rnd = get_rand32();
                 alloc_size = (rnd % max_alloc) + test_param.min_alloc_size;
-                //alloc_size = MAX(1, alloc_size);
                 p = pThis->Malloc(alloc_size);
                 mem_list[j] = p;
             }

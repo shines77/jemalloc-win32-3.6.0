@@ -1,6 +1,12 @@
 
 #ifdef _MSC_VER
 
+#if	(defined(_MSC_VER) && (_MSC_VER >= 1600)) || !defined(_MSC_VER)
+#include <stdint.h>
+#else
+#include "msvc_compat/stdint.h"
+#endif	// _MSC_VER
+
 /******************************************************************************/
 #ifdef JEMALLOC_H_TYPES
 
@@ -22,7 +28,7 @@ typedef struct _region_list_entry {
     void *top_allocated;
     void *top_committed;
     void *top_reserved;
-    long reserve_size;
+    intptr_t reserve_size;
     struct _region_list_entry *previous;
 } region_list_entry;
 
@@ -64,7 +70,7 @@ long getregionsize(void);
 void *mmap(void *ptr, long size, long prot, long type, long handle, long arg);
 
 /* munmap for windows */
-long munmap(void *ptr, long size);
+long munmap(void *ptr, intptr_t size);
 
 #define USE_SIMPLE_WIN_SBRK     0
 
@@ -81,14 +87,14 @@ void *sbrk(intptr_t increment);
 #else  /* !JEMALLOC_HAVE_SBRK */
 
 /* sbrk version for windows */
-void *sbrk_win(long size);
+void *sbrk_win(intptr_t size);
 
 /* sbrk for windows secondary version */
-void *sbrk_simple(long size);
+void *sbrk_simple(intptr_t size);
 
 #endif  /* JEMALLOC_HAVE_SBRK */
 
-void vminfo(unsigned long *free, unsigned long *reserved, unsigned long *committed);
+void vminfo(size_t *free, size_t *reserved, size_t *committed);
 
 int cpuinfo(int whole, unsigned long *kernel, unsigned long *user);
 
@@ -103,7 +109,7 @@ int cpuinfo(int whole, unsigned long *kernel, unsigned long *user);
 //#include <windows.h>
 
 /* Allocate and link a region entry in the region list */
-static int region_list_append (region_list_entry **last, void *base_reserved, long reserve_size) {
+static int region_list_append (region_list_entry **last, void *base_reserved, intptr_t reserve_size) {
     region_list_entry *next = (region_list_entry *)HeapAlloc(GetProcessHeap(), 0, sizeof(region_list_entry));
     if (! next)
         return FALSE;

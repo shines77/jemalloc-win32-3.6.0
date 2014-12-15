@@ -62,13 +62,13 @@ test_data_t orig_malloc_test_params[] = {
 #else
     ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 19),  (1 << 19),  100000,     0,      0,
 
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 20),  (1 << 20),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 21),  (1 << 21),  50000,      0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 22),  (1 << 22),  50000,      0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 23),  (1 << 23),  25000,      0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 24),  (1 << 24),  10000,      0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 25),  (1 << 25),  10000,      0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 26),  (1 << 26),  10000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 20),  (1 << 20),  64000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 21),  (1 << 21),  32000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 22),  (1 << 22),  16000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 23),  (1 << 23),  8000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 24),  (1 << 24),  4000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 25),  (1 << 25),  2000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 26),  (1 << 26),  1000,       0,      0,
 #endif
 
     // define continuous size and repeated alloca
@@ -110,11 +110,19 @@ test_data_t orig_malloc_test_params[] = {
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 18),  1000000,    0,      0,
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 19),  1000000,    0,      0,
 
+#ifndef _DEBUG
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 20),  100000,     0,      0,
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 21),  100000,     0,      0,
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 22),  100000,     0,      0,
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 23),  100000,     0,      0,
     ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 24),  100000,     0,      0,
+#else
+    ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 20),  32000,      0,      0,
+    ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 21),  16000,      0,      0,
+    ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 22),  80000,      0,      0,
+    ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 23),  40000,      0,      0,
+    ST_RANDOM_SIZE,     AW_REPEATED_ALLOC,      1,          (1 << 24),  20000,      0,      0,
+#endif
 
     // define random size and repeated alloca
     ST_RANDOM_CONTIGUOUS, ALLOC_WAYS_NONE,      0,          0,          0,          0,      0,
@@ -169,13 +177,13 @@ test_data_t je_malloc_test_params[] = {
 #else                                           
     ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 19),  (1 << 19),  100000,     0,      0,
                                                 
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 20),  (1 << 20),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 21),  (1 << 21),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 22),  (1 << 22),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 23),  (1 << 23),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 24),  (1 << 24),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 25),  (1 << 25),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 26),  (1 << 26),  100000,     0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 20),  (1 << 20),  64000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 21),  (1 << 21),  32000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 22),  (1 << 22),  16000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 23),  (1 << 23),  8000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 24),  (1 << 24),  4000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 25),  (1 << 25),  2000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 26),  (1 << 26),  1000,       0,      0,
 #endif
 
     // define continuous size and repeated alloca
@@ -276,13 +284,13 @@ test_data_t apr_malloc_test_params[] = {
 #else                                           
     ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 19),  (1 << 19),  100000,     0,      0,
                                                 
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 20),  (1 << 20),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 21),  (1 << 21),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 22),  (1 << 22),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 23),  (1 << 23),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 24),  (1 << 24),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 25),  (1 << 25),  100000,     0,      0,
-    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 26),  (1 << 26),  100000,     0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 20),  (1 << 20),  64000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 21),  (1 << 21),  32000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 22),  (1 << 22),  16000,      0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 23),  (1 << 23),  8000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 24),  (1 << 24),  4000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 25),  (1 << 25),  2000,       0,      0,
+    ST_FIXED_SIZE,      AW_REPEATED_ALLOC,      (1 << 26),  (1 << 26),  1000,       0,      0,
 #endif
 
     // define continuous size and repeated alloca
@@ -406,22 +414,41 @@ char *format_bytes_size(char *buf, size_t size, int len)
         return "";
 }
 
+#if defined(_DEBUG) || !defined(NDEBUG)
+    static const int kLoopCoffeA = 1;
+    static const int kLoopCoffeB = 32;
+#else
+    static const int kLoopCoffeA = 1;
+    static const int kLoopCoffeB = 2;
+#endif
+
+int adjust_loop_count(int loop_count)
+{
+    return (loop_count * kLoopCoffeA / kLoopCoffeB);
+}
+
 template<typename T>
 double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_params, int test_length)
 {
     int i;
-    double used_time, total_time, fmultiple;
+    double used_time, total_time, fmultiple, loop_coffe;
+    int loop_count1, loop_count2, loop_count3;
     char buf[128];
 
     srand(FIXED_RANDOM_SEED);
     total_time = 0.0;
+    loop_coffe = (double)kLoopCoffeA / (double)kLoopCoffeB;
 
     if (tester != NULL && test_params != NULL) {
         if (test_length > 1) {
+            // adjust loop count
+            loop_count1 = adjust_loop_count(test_params[1].loop_count1);
+            loop_count2 = adjust_loop_count(test_params[1].loop_count2);
+            loop_count3 = adjust_loop_count(test_params[1].loop_count3);
             // setting params
             tester->Setting(test_params[1].size_type, test_params[1].alloc_way,
                 test_params[1].min_alloc_size, test_params[1].max_alloc_size,
-                test_params[1].loop_count1, test_params[1].loop_count2, test_params[1].loop_count3);
+                loop_count1, loop_count2, loop_count3);
             tester->Start();
             tester->Run();
             tester->Stop();
@@ -470,18 +497,22 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                 }
                 if (test_params[i].size_type == ST_RANDOM_SIZE) {
                     // random seed
-                    srand(test_params[i].max_alloc_size);
+                    srand(test_params[i].max_alloc_size ^ FIXED_RANDOM_SEED);
                 }
-                // setting params
+                // adjust loop count
+                loop_count1 = adjust_loop_count(test_params[i].loop_count1);
+                loop_count2 = adjust_loop_count(test_params[i].loop_count2);
+                loop_count3 = adjust_loop_count(test_params[i].loop_count3);
                 fmultiple = (double)MAX_LOOP_COUNT / (double)test_params[i].loop_count1;
+                // setting params
                 tester->Setting(test_params[i].size_type, test_params[i].alloc_way,
                     test_params[i].min_alloc_size, test_params[i].max_alloc_size,
-                    test_params[i].loop_count1, test_params[i].loop_count2, test_params[i].loop_count3);
+                    loop_count1, loop_count2, loop_count3);
                 tester->Start();
                 tester->Run();
                 tester->Stop();
-                used_time = tester->GetUsedTime();
-                total_time += used_time * fmultiple;
+                used_time = tester->GetUsedTime() * fmultiple;
+                total_time += used_time;
                 if (test_params[i].size_type == ST_CONTINUOUS_SIZE
                     || test_params[i].size_type == ST_RANDOM_SIZE) {
                     //mempool_printf("分配大小: %d-%-8d    ", tester->min_alloc_size, tester->max_alloc_size);
@@ -492,12 +523,12 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                     //mempool_printf("分配大小: %-8d    ", tester->min_alloc_size);
                     mempool_printf("分配大小: %s    ", format_bytes_size(buf, tester->test_param.min_alloc_size, 8));
                 }
-                mempool_printf("重复次数: %-7d", (int)(tester->test_param.loop_count1 * fmultiple));
+                mempool_printf("重复次数: %-7d", (int)(loop_count1 * fmultiple));
                 if (test_params[i].loop_count1 < MAX_LOOP_COUNT)
                     mempool_printf(" *  ");
                 else
                     mempool_printf("    ");
-                mempool_printf("用时: %0.3f ms\n", used_time * fmultiple);
+                mempool_printf("用时: %0.3f ms\n", used_time);
             }
             mempool_printf("----------------------------------------------------------------\n");
             mempool_printf("  %s    总用时: %0.3f 秒.\n", tester->GetFuncName(), total_time / 1000.0);
@@ -549,18 +580,22 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                 }
                 if (test_params[i].size_type == ST_RANDOM_SIZE) {
                     // random seed
-                    srand(test_params[i].max_alloc_size);
+                    srand(test_params[i].max_alloc_size ^ FIXED_RANDOM_SEED);
                 }
-                // setting params
+                // adjust loop count
+                loop_count1 = adjust_loop_count(test_params[i].loop_count1);
+                loop_count2 = adjust_loop_count(test_params[i].loop_count2);
+                loop_count3 = adjust_loop_count(test_params[i].loop_count3);
                 fmultiple = (double)MAX_LOOP_COUNT / (double)test_params[i].loop_count1;
+                // setting params
                 tester->Setting(test_params[i].size_type, test_params[i].alloc_way,
                     test_params[i].min_alloc_size, test_params[i].max_alloc_size,
                     test_params[i].loop_count1, test_params[i].loop_count2, test_params[i].loop_count3);
                 tester->Start();
                 tester->Run();
                 tester->Stop();
-                used_time = tester->GetUsedTime();
-                total_time += used_time * fmultiple;
+                used_time = tester->GetUsedTime() * fmultiple;
+                total_time += used_time;
                 if (test_params[i].size_type == ST_CONTINUOUS_SIZE
                      || test_params[i].size_type == ST_RANDOM_SIZE) {
                     //mempool_printf("Alloc Size: %d-%-8d    ", tester->test_param.min_alloc_size, tester->test_param.max_alloc_size);
@@ -571,12 +606,12 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                     //mempool_printf("Alloc Size: %-8d    ", tester->test_param.min_alloc_size);
                     mempool_printf("Alloc Size: %s    ", format_bytes_size(buf, tester->test_param.min_alloc_size, 8));
                 }
-                mempool_printf("Repeat Times: %-7d", (int)(tester->test_param.loop_count1 * fmultiple));
+                mempool_printf("Repeat Times: %-7d", (int)(loop_count1 * fmultiple));
                 if (test_params[i].loop_count1 < MAX_LOOP_COUNT)
                     mempool_printf(" *  ");
                 else
                     mempool_printf("    ");
-                mempool_printf("Used Time: %0.3f ms\n", used_time * fmultiple);
+                mempool_printf("Used Time: %0.3f ms\n", used_time);
             }
             mempool_printf("-------------------------------------------------------------------------\n");
             mempool_printf("  %s    Total Time: %0.3f seconds.\n", tester->GetFuncName(), total_time / 1000.0);
@@ -686,20 +721,19 @@ int main(int argc, char * argv[])
     mempool_log_close();
 
 #if 0
-
     // If you use jemalloc through the static lib,
     // must be manual initialize jemalloc first.
     je_init();
 
     void *p = (void *)je_malloc(128);
     if (p) {
-        printf("malloc(%u) result ptr = 0x%08X\n\n", 128, p);
+        printf("malloc(%u) result ptr = 0x%08"SCNXPTR"\n\n", 128, p);
         je_free(p);
     }
 
     p = (void *)je_malloc(256);
     if (p) {
-        printf("malloc(%u) result ptr = 0x%08X\n\n", 256, p);
+        printf("malloc(%u) result ptr = 0x%08"SCNXPTR"\n\n", 256, p);
         je_free(p);
     }
 
@@ -734,6 +768,8 @@ int main(int argc, char * argv[])
         //delete je_tester;
     }
 
+    printf("\n");
+
     if (tester) {
         delete tester;
         tester = NULL;
@@ -741,10 +777,8 @@ int main(int argc, char * argv[])
 
     // Unload the jemalloc
     je_uninit();
-
 #endif
 
-    printf("\n");
 #ifdef _WIN32
     system("pause");
 #endif

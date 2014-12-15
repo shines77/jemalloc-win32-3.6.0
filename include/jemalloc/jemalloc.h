@@ -81,6 +81,30 @@
 #include "msvc_compat/strings.h"
 #endif	// _MSC_VER
 
+#ifndef _MSC_VER
+#include <inttypes.h>
+#else
+#include "msvc_compat/inttypes.h"
+
+#undef SCNoPTR
+#undef SCNuPTR
+#undef SCNxPTR
+#undef SCNXPTR
+
+#ifdef _WIN64 // [
+#  define SCNoPTR     "I64o"
+#  define SCNuPTR     "I64u"
+#  define SCNxPTR     "I64x"
+#  define SCNXPTR     "I64X"
+#else  // _WIN64 ][
+#  define SCNoPTR     "lo"
+#  define SCNuPTR     "lu"
+#  define SCNxPTR     "lx"
+#  define SCNXPTR     "lX"
+#endif  // _WIN64 ]
+
+#endif	// _MSC_VER
+
 #ifdef __cplusplus
 extern "C" {
 #endif

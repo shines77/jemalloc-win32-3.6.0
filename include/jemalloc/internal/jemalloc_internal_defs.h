@@ -9,9 +9,6 @@
 /* #undef JEMALLOC_PREFIX */
 /* #undef JEMALLOC_CPREFIX */
 
-#define JEMALLOC_PREFIX     " je_ "
-#define JEMALLOC_CPREFIX    " JE_ "
-
 /*
  * JEMALLOC_PRIVATE_NAMESPACE is used as a prefix for all library-private APIs.
  * For shared libraries, symbol visibility mechanisms prevent these symbols

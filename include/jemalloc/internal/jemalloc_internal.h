@@ -644,7 +644,6 @@ malloc_tsd_funcs(JEMALLOC_ALWAYS_INLINE, arenas, arena_t *, NULL,
 JEMALLOC_ALWAYS_INLINE size_t
 s2u(size_t size)
 {
-
 	if (size <= SMALL_MAXCLASS)
 		return (arena_bin_info[SMALL_SIZE2BIN(size)].reg_size);
 	if (size <= arena_maxclass)

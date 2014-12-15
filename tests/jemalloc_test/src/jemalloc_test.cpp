@@ -428,15 +428,17 @@ int adjust_loop_count(int loop_count)
 }
 
 template<typename T>
-double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_params, int test_length)
+double mempool_malloc_tester(mempool_tester<T> *tester, test_data_t *test_params, int test_length)
 {
     int i;
     double used_time, total_time, fmultiple, loop_coffe;
+    double first_time;
     int loop_count1, loop_count2, loop_count3;
     char buf[128];
 
     srand(FIXED_RANDOM_SEED);
     total_time = 0.0;
+    first_time = 0.0;
     loop_coffe = (double)kLoopCoffeA / (double)kLoopCoffeB;
 
     if (tester != NULL && test_params != NULL) {
@@ -453,8 +455,8 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
             tester->Run();
             tester->Stop();
             used_time = tester->GetUsedTime();
+            first_time = used_time;
             total_time += used_time;
-            total_time -= total_time;
         }
         if (g_lang_id == LANG_ZH_CN) {
             mempool_printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
@@ -515,7 +517,8 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                 total_time += used_time;
                 if (test_params[i].size_type == ST_CONTINUOUS_SIZE
                     || test_params[i].size_type == ST_RANDOM_SIZE) {
-                    //mempool_printf("分配大小: %d-%-8d    ", tester->min_alloc_size, tester->max_alloc_size);
+                    //mempool_printf("分配大小: %d-%-8d    ", tester->min_alloc_size,
+                    //    tester->max_alloc_size);
                     mempool_printf("分配大小: %d-%s    ", tester->test_param.min_alloc_size,
                         format_bytes_size(buf, tester->test_param.max_alloc_size, 8));
                 }
@@ -531,7 +534,7 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                 mempool_printf("用时: %0.3f ms\n", used_time);
             }
             mempool_printf("----------------------------------------------------------------\n");
-            mempool_printf("  %s    总用时: %0.3f 秒.\n", tester->GetFuncName(), total_time / 1000.0);
+            mempool_printf("  %s    总用时: %0.3f 秒.\n", tester->GetFuncName(), (total_time - first_time) / 1000.0);
             mempool_printf("\n");
         }
         else {
@@ -598,7 +601,8 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                 total_time += used_time;
                 if (test_params[i].size_type == ST_CONTINUOUS_SIZE
                      || test_params[i].size_type == ST_RANDOM_SIZE) {
-                    //mempool_printf("Alloc Size: %d-%-8d    ", tester->test_param.min_alloc_size, tester->test_param.max_alloc_size);
+                    //mempool_printf("Alloc Size: %d-%-8d    ", tester->test_param.min_alloc_size,
+                    //     tester->test_param.max_alloc_size);
                     mempool_printf("Alloc Size: %d-%s    ", tester->test_param.min_alloc_size,
                         format_bytes_size(buf, tester->test_param.max_alloc_size, 8));
                 }
@@ -614,7 +618,7 @@ double mempool_malloc_tester(mempool_tester_base<T> *tester, test_data_t *test_p
                 mempool_printf("Used Time: %0.3f ms\n", used_time);
             }
             mempool_printf("-------------------------------------------------------------------------\n");
-            mempool_printf("  %s    Total Time: %0.3f seconds.\n", tester->GetFuncName(), total_time / 1000.0);
+            mempool_printf("  %s    Total Time: %0.3f seconds.\n", tester->GetFuncName(), (total_time - first_time) / 1000.0);
             mempool_printf("\n");
         }
     }
@@ -737,24 +741,13 @@ int main(int argc, char * argv[])
         je_free(p);
     }
 
-    mempool_tester_base<jemalloc_tester> *tester;
-    mempool_tester<jemalloc_tester> *tester2;
+    mempool_tester<jemalloc_tester> *tester;
     jemalloc_tester *je_tester;
 
-    tester = static_cast<mempool_tester_base<jemalloc_tester> *>(new mempool_tester_base<jemalloc_tester>());
+    tester = new mempool_tester<jemalloc_tester>();
     if (tester) {
         printf("GetFuncName() = \"%s\"\n", tester->GetFuncName());
         tester->Run();
-        //delete tester;
-        //tester = NULL;
-    }
-
-    printf("\n");
-
-    tester2 = static_cast<mempool_tester<jemalloc_tester> *>(tester);
-    if (tester2) {
-        printf("GetFuncName() = \"%s\"\n", tester2->GetFuncName());
-        tester2->Run();
         //delete tester;
         //tester = NULL;
     }

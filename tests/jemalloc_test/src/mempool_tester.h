@@ -23,6 +23,17 @@ using namespace jimi;
 extern "C" {
 #endif  /* __cplusplus */
 
+FILE *mempool_log_init(const char *filename);
+void  mempool_log_close(void);
+
+int   mempool_printf(char *fmt, ...);
+
+size_t get_rand32();
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
+
 enum size_types
 {
     SIZE_TYPES_NONE = 0,
@@ -48,6 +59,10 @@ enum alloc_ways
     AW_RANDOM_FREE,             // contiguous alloca and random order to free
 };
 
+////////////////////////////////////////////////////
+// class test_data_t
+////////////////////////////////////////////////////
+
 typedef struct test_data_s
 {
     size_types      size_type;
@@ -60,37 +75,6 @@ typedef struct test_data_s
     int             loop_count3;
 } test_data_t;
 
-FILE *mempool_log_init(const char *filename);
-void  mempool_log_close(void);
-
-int   mempool_printf(char *fmt, ...);
-
-size_t get_rand32();
-
-#ifdef __cplusplus
-}
-#endif  /* __cplusplus */
-
-////////////////////////////////////////////////////
-// class mempool_test_param
-////////////////////////////////////////////////////
-
-typedef struct mempool_test_param
-{
-public:
-    int             size_type;
-    int             alloc_way;
-    int             chunk_type;
-    unsigned int    min_alloc_size;
-    unsigned int    max_alloc_size;
-    int             loop_count1;
-    int             loop_count2;
-    int             loop_count3;
-
-private:
-    char            func_name[64];
-} mempool_test_param;
-
 FORCE_INLINE
 size_t get_rand32()
 {
@@ -102,18 +86,18 @@ size_t get_rand32()
 }
 
 ////////////////////////////////////////////////////
-// class mempool_tester_base<T>
+// class mempool_tester<T>
 ////////////////////////////////////////////////////
 
 template <class T>
-class mempool_tester_base
+class mempool_tester
 {
 public:
-    mempool_tester_base();
-    mempool_tester_base(size_types size_type, alloc_ways alloc_way,
+    mempool_tester();
+    mempool_tester(size_types size_type, alloc_ways alloc_way,
         int min_alloc_size, int max_alloc_size,
         int loop_count1, int loop_count2 = 0, int loop_count3 = 0);
-    ~mempool_tester_base();
+    ~mempool_tester();
 
 public:
     void Setting(size_types size_type, alloc_ways alloc_way,
@@ -142,18 +126,18 @@ public:
     }
 
 public:
-    mempool_test_param  test_param;
+    test_data_t test_param;
 
 protected:
-    stop_watch          _sw;
+    stop_watch _sw;
 };
 
 template <class T>
-mempool_tester_base<T>::mempool_tester_base()
+mempool_tester<T>::mempool_tester()
 {
-    test_param.size_type       = 0;
-    test_param.alloc_way       = 0;
-    test_param.chunk_type      = 0;
+    test_param.size_type       = SIZE_TYPES_NONE;
+    test_param.alloc_way       = ALLOC_WAYS_NONE;
+//  test_param.chunk_type      = 0;
     test_param.min_alloc_size  = 0;
     test_param.max_alloc_size  = 0;
     test_param.loop_count1     = 0;
@@ -162,14 +146,14 @@ mempool_tester_base<T>::mempool_tester_base()
 }
 
 template <class T>
-mempool_tester_base<T>::mempool_tester_base(size_types size_type, alloc_ways alloc_way,
+mempool_tester<T>::mempool_tester(size_types size_type, alloc_ways alloc_way,
                                          int min_alloc_size, int max_alloc_size,
                                          int loop_count1, int loop_count2 /* = 0 */,
                                          int loop_count3 /* = 0 */)
 {
     test_param.size_type       = size_type;
     test_param.alloc_way       = alloc_way;
-    test_param.chunk_type      = 0;
+//  test_param.chunk_type      = 0;
     test_param.min_alloc_size  = min_alloc_size;
     test_param.max_alloc_size  = max_alloc_size;
     test_param.loop_count1     = loop_count1;
@@ -178,20 +162,20 @@ mempool_tester_base<T>::mempool_tester_base(size_types size_type, alloc_ways all
 }
 
 template <class T>
-mempool_tester_base<T>::~mempool_tester_base()
+mempool_tester<T>::~mempool_tester()
 {
     // Do nothing!
 }
 
 template <class T>
-void mempool_tester_base<T>::Setting(size_types size_type, alloc_ways alloc_way,
+void mempool_tester<T>::Setting(size_types size_type, alloc_ways alloc_way,
                                      int min_alloc_size, int max_alloc_size,
                                      int loop_count1, int loop_count2 /* = 0 */,
                                      int loop_count3 /* = 0 */)
 {
     test_param.size_type       = size_type;
     test_param.alloc_way       = alloc_way;
-    test_param.chunk_type      = 0;
+//  test_param.chunk_type      = 0;
     test_param.min_alloc_size  = min_alloc_size;
     test_param.max_alloc_size  = max_alloc_size;
     test_param.loop_count1     = loop_count1;
@@ -201,9 +185,9 @@ void mempool_tester_base<T>::Setting(size_types size_type, alloc_ways alloc_way,
 
 template <class T>
 inline
-char * mempool_tester_base<T>::GetFuncName()
+char * mempool_tester<T>::GetFuncName()
 {
-    //printf("mempool_tester_base<T>::GetFuncName();\n");
+    //printf("mempool_tester<T>::GetFuncName();\n");
     T *pThis = static_cast<T *>(this);
     if (pThis) {
         return pThis->GetFuncName();
@@ -214,9 +198,9 @@ char * mempool_tester_base<T>::GetFuncName()
 
 template <class T>
 inline
-void * mempool_tester_base<T>::Malloc(size_t size)
+void * mempool_tester<T>::Malloc(size_t size)
 {
-    //printf("mempool_tester_base<T>::Malloc();\n");
+    //printf("mempool_tester<T>::Malloc();\n");
     T *pThis = static_cast<T *>(this);
     if (pThis) {
         return pThis->Malloc(size);
@@ -227,9 +211,9 @@ void * mempool_tester_base<T>::Malloc(size_t size)
 
 template <class T>
 inline
-void * mempool_tester_base<T>::Realloc(void *p, size_t new_size)
+void * mempool_tester<T>::Realloc(void *p, size_t new_size)
 {
-    //printf("mempool_tester_base<T>::Realloc();\n");
+    //printf("mempool_tester<T>::Realloc();\n");
     T *pThis = static_cast<T *>(this);
     if (pThis) {
         return pThis->Realloc(p, new_size);
@@ -240,9 +224,9 @@ void * mempool_tester_base<T>::Realloc(void *p, size_t new_size)
 
 template <class T>
 inline
-void mempool_tester_base<T>::Free(void *p)
+void mempool_tester<T>::Free(void *p)
 {
-    //printf("mempool_tester_base<T>::Free();\n");
+    //printf("mempool_tester<T>::Free();\n");
     T *pThis = static_cast<T *>(this);
     if (pThis) {
         pThis->Free(p);
@@ -251,9 +235,9 @@ void mempool_tester_base<T>::Free(void *p)
 
 template <class T>
 inline
-void mempool_tester_base<T>::Clear(void *p)
+void mempool_tester<T>::Clear(void *p)
 {
-    //printf("mempool_tester_base<T>::Clear();\n");
+    //printf("mempool_tester<T>::Clear();\n");
     T *pThis = static_cast<T *>(this);
     if (pThis) {
         pThis->Clear(p);
@@ -262,7 +246,7 @@ void mempool_tester_base<T>::Clear(void *p)
 
 template <class T>
 inline
-void mempool_tester_base<T>::Run()
+void mempool_tester<T>::Run()
 {
     const int kMaxPtrList = 1024;
 
@@ -273,7 +257,7 @@ void mempool_tester_base<T>::Run()
     size_t max_alloc;
     void *p;
 
-    //printf("mempool_tester_base<T>::Run();\n");
+    //printf("mempool_tester<T>::Run();\n");
 
     T *pThis = static_cast<T *>(this);
     if (pThis == NULL)
@@ -357,100 +341,5 @@ void mempool_tester_base<T>::Run()
         //pThis->Run();
     }
 }
-
-////////////////////////////////////////////////////
-// class mempool_tester<T>
-////////////////////////////////////////////////////
-
-template <class T>
-class mempool_tester : public mempool_tester_base<T>
-{
-public:
-    mempool_tester();
-    mempool_tester(size_types size_type, alloc_ways alloc_way,
-        int min_alloc_size, int max_alloc_size,
-        int loop_count1, int loop_count2 = 0, int loop_count3 = 0);
-    ~mempool_tester();
-
-public:
-    char *GetFuncName(void) {
-        //printf("mempool_tester<T>::GetFuncName();\n");
-        return "class mempool_tester()";
-    }
-
-    void *Malloc(size_t size) {
-        //printf("mempool_tester<T>::Malloc();\n");
-        T *pThis = static_cast<T *>(this);
-        if (pThis) {
-            return pThis->Malloc(size);
-        }
-        else
-            return NULL;
-    }
-
-    void *Realloc(void *p, size_t new_size) {
-        //printf("mempool_tester<T>::Realloc();\n");
-        T *pThis = static_cast<T *>(this);
-        if (pThis) {
-            return pThis->Realloc(p, new_size);
-        }
-        else
-            return NULL;
-    }
-
-    void Free(void *p) {
-        //printf("mempool_tester<T>::Clear();\n");
-        T *pThis = static_cast<T *>(this);
-        if (pThis) {
-            pThis->Free(p);
-        }
-    }
-
-    void Clear(void *p) {
-        //printf("mempool_tester<T>::Clear();\n");
-        T *pThis = static_cast<T *>(this);
-        if (pThis) {
-            pThis->Clear(p);
-        }
-    }
-
-    void Run(void) {
-        //printf("mempool_tester<T>::Run();\n");
-#if 0
-        T *pThis = static_cast<T *>(this);
-        if (pThis) {
-            pThis->Run();
-        }
-#else
-        mempool_tester_base<T> *pThis = static_cast<mempool_tester_base<T> *>(this);
-        if (pThis) {
-            pThis->Run();
-        }
-#endif
-    }
-};
-
-template <class T>
-mempool_tester<T>::mempool_tester() : mempool_tester_base<T>()
-{
-}
-
-template <class T>
-mempool_tester<T>::mempool_tester(size_types size_type, alloc_ways alloc_way,
-                               int min_alloc_size, int max_alloc_size,
-                               int loop_count1, int loop_count2 /* = 0 */,
-                               int loop_count3 /* = 0 */)
- : mempool_tester_base<T>(size_type, alloc_way,
-                          min_alloc_size, max_alloc_size,
-                          loop_count1, loop_count2, loop_count3)
-{
-}
-
-template <class T>
-mempool_tester<T>::~mempool_tester()
-{
-    // Do nothing!
-}
-
 
 #endif  /* _JEMALLOC_MEMPOOL_TESTER_H_ */

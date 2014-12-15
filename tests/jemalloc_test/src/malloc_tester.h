@@ -19,7 +19,7 @@
 // class malloc_tester
 ////////////////////////////////////////////////////
 
-class malloc_tester : public mempool_tester_base<malloc_tester>
+class malloc_tester : public mempool_tester<malloc_tester>
 {
 public:
     malloc_tester();
@@ -60,17 +60,10 @@ public:
 
     void Run(void) {
         //printf("malloc_tester<T>::Run();\n");
-#if 1
-        mempool_tester_base<malloc_tester> *pThis = static_cast<mempool_tester_base<malloc_tester> *>(this);
-        if (pThis) {
-            pThis->Run();
-        }
-#else
         mempool_tester<malloc_tester> *pThis = static_cast<mempool_tester<malloc_tester> *>(this);
         if (pThis) {
             pThis->Run();
         }
-#endif
     }
 };
 

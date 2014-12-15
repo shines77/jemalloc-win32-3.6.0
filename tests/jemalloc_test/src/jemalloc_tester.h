@@ -19,7 +19,7 @@
 // class jemalloc_tester
 ////////////////////////////////////////////////////
 
-class jemalloc_tester : public mempool_tester_base<jemalloc_tester>
+class jemalloc_tester : public mempool_tester<jemalloc_tester>
 {
 public:
     jemalloc_tester();
@@ -60,17 +60,10 @@ public:
 
     void Run(void) {
         //printf("jemalloc_tester<T>::Run();\n");
-#if 1
-        mempool_tester_base<jemalloc_tester> *pThis = static_cast<mempool_tester_base<jemalloc_tester> *>(this);
-        if (pThis) {
-            pThis->Run();
-        }
-#else
         mempool_tester<jemalloc_tester> *pThis = static_cast<mempool_tester<jemalloc_tester> *>(this);
         if (pThis) {
             pThis->Run();
         }
-#endif
     }
 };
 

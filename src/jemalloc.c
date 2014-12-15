@@ -81,9 +81,12 @@ _uninit_init_lock(void)
 }
 
 #ifdef _MSC_VER
-#  pragma section(".CRT$XCU", read)
+#pragma section(".CRT$XCU", read)
+
 JEMALLOC_SECTION(".CRT$XCU") JEMALLOC_ATTR(used)
 static const void (WINAPI *init_init_lock)(void)   = _init_init_lock;
+
+JEMALLOC_SECTION(".CRT$XCU") JEMALLOC_ATTR(used)
 static const void (WINAPI *uninit_init_lock)(void) = _uninit_init_lock;
 #endif
 
@@ -126,31 +129,19 @@ static bool	malloc_init_hard(void);
  * Begin miscellaneous support functions.
  */
 
+void je_init(void)
+{
 #ifdef _WIN32
-
-void je_init(void)
-{
     _init_init_lock();
+#endif
 }
 
 void je_uninit(void)
 {
+#ifdef _WIN32
     _uninit_init_lock();
+#endif
 }
-
-#else  /* !_WIN32 */
-
-void je_init(void)
-{
-    // Do nothing!
-}
-
-void je_uninit(void)
-{
-    // Do nothing!
-}
-
-#endif  /* _WIN32 */
 
 /* Create a new arena and insert it into the arenas array at index ind. */
 arena_t *

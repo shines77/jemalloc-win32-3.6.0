@@ -28,6 +28,6 @@ URL: http://www.canonware.com/jemalloc/
 
 Visual Studio(Windows) version modified by: shines77 (GuoXiongHui)
 
-URL: https://github.com/shines77/
+URL: https://github.com/shines77/jemalloc-win32/
 
 -------------------------------------------------------------------

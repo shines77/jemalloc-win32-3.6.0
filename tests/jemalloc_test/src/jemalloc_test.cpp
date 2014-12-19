@@ -3,7 +3,6 @@
 //
 
 #include "jemalloc_test.h"
-
 #include "jemalloc/jemalloc.h"
 
 #include "mempool_tester.h"
@@ -16,7 +15,7 @@
 #include <stdio.h>
 
 #include <assert.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #endif
 #include <string.h>
@@ -731,13 +730,13 @@ int main(int argc, char * argv[])
 
     void *p = (void *)je_malloc(128);
     if (p) {
-        printf("malloc(%u) result ptr = 0x%016"SCNXPTR"\n\n", 128, p);
+        printf("malloc(%u) result ptr = 0x%016"PRIXPTR"\n\n", 128, p);
         je_free(p);
     }
 
     p = (void *)je_malloc(256);
     if (p) {
-        printf("malloc(%u) result ptr = 0x%016"SCNXPTR"\n\n", 256, p);
+        printf("malloc(%u) result ptr = 0x%016"PRIXPTR"\n\n", 256, p);
         je_free(p);
     }
 

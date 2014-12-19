@@ -89,10 +89,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)\</OutDir>
     <IntDir>$(SolutionDir)gen\tmp\$(MsvcPlatformToolset)\$(ProjectName)\$(MsvcPlatformShortName)-$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_$(MsvcPlatformShortName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)\</OutDir>
     <IntDir>$(SolutionDir)gen\tmp\$(MsvcPlatformToolset)\$(ProjectName)\$(MsvcPlatformShortName)-$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_$(MsvcPlatformShortName)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)_$(MsvcPlatformShortName)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>$(ProjectName)_$(MsvcPlatformShortName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,7 +116,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Configuration)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);..\..\..\..\lib;..\..\..\..\deps;$(SolutionDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);$(SolutionDir)lib;$(SolutionDir)deps;.\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);.\lib;.\deps;$(ProjectDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);$(ProjectDir)lib;$(ProjectDir)deps;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -125,7 +133,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Configuration)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);..\..\..\..\lib;..\..\..\..\deps;$(SolutionDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);$(SolutionDir)lib;$(SolutionDir)deps;.\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);.\lib;.\deps;$(ProjectDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName);$(ProjectDir)lib;$(ProjectDir)deps;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

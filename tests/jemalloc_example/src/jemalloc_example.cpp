@@ -3,7 +3,6 @@
 //
 
 #include "jemalloc_example.h"
-
 #include "jemalloc/jemalloc.h"
 
 #include <stdlib.h>
@@ -20,13 +19,13 @@ int main(int argc, char * argv[])
 
     p = (void *)je_malloc(128);
     if (p) {
-        printf("malloc(%u) result ptr = 0x%016"SCNXPTR"\n\n", 128, p);
+        printf("malloc(%u) result ptr = 0x%016"PRIXPTR"\n\n", 128, p);
         je_free(p);
     }
 
     p = (void *)je_malloc(256);
     if (p) {
-        printf("malloc(%u) result ptr = 0x%016"SCNXPTR"\n\n", 256, p);
+        printf("malloc(%u) result ptr = 0x%016"PRIXPTR"\n\n", 256, p);
         je_free(p);
     }
 

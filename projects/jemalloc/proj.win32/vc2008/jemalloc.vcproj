@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName)_$(ConfigurationName).lib"
+				OutputFile="$(OutDir)\$(ProjectName)_$(MsvcPlatformShortName)_$(ConfigurationName).lib"
 				AdditionalLibraryDirectories="&quot;..\..\..\..\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;..\..\..\..\lib;..\..\..\..\deps;&quot;$(SolutionDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;&quot;$(SolutionDir)lib&quot;;&quot;$(SolutionDir)deps&quot;;&quot;.\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;.\lib;.\deps;&quot;$(ProjectDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;&quot;$(ProjectDir)lib&quot;;&quot;$(ProjectDir)deps&quot;"
 			/>
 			<Tool
@@ -128,6 +128,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)_$(MsvcPlatformShortName)_$(ConfigurationName).lib"
 				AdditionalLibraryDirectories="&quot;..\..\..\..\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;..\..\..\..\lib;..\..\..\..\deps;&quot;$(SolutionDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;&quot;$(SolutionDir)lib&quot;;&quot;$(SolutionDir)deps&quot;;&quot;.\lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;.\lib;.\deps;&quot;$(ProjectDir)lib\$(MsvcPlatformToolset)\$(MsvcPlatformShortName)&quot;;&quot;$(ProjectDir)lib&quot;;&quot;$(ProjectDir)deps&quot;"
 			/>
 			<Tool

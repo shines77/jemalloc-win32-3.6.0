@@ -9,6 +9,8 @@
 /config.status
 # /configure
 
+# /VERSION
+
 /doc/html.xsl
 /doc/manpages.xsl
 /doc/jemalloc.xml
@@ -68,8 +70,6 @@ test/include/test/jemalloc_test_defs.h
 /test/unit/*.gcda
 /test/unit/*.gcno
 /test/unit/*.out
-
-/VERSION
 
 # Compiled Object files
 *.slo
